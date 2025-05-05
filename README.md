@@ -186,7 +186,7 @@ The SDK uses Jetpack Compose and so, if the project does not support jetpack com
 
 3. **Configure Android Platform Code (MainActivity.kt)**
 
-***Import the SDK as well as Jetpack Compose libraries and the FlutterEngine ***
+***Import the SDK as well as Jetpack Compose libraries and the FlutterEngine***
 ```kotlin
 
 import io.flutter.embedding.engine.FlutterEngine
