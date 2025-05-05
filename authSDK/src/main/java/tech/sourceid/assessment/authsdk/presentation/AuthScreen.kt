@@ -25,14 +25,12 @@ import androidx.compose.ui.unit.sp
 import tech.sourceid.assessment.authsdk.data.AuthConfig
 import tech.sourceid.assessment.authsdk.data.UserData
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthScreen(
     config: AuthConfig,
     onSubmit: (UserData) -> Unit
 ) {
-
     val context = LocalContext.current
 
     val email = remember { mutableStateOf("") }
@@ -41,73 +39,116 @@ fun AuthScreen(
     val firstName = remember { mutableStateOf("") }
     val lastName = remember { mutableStateOf("") }
 
-    val errorMessage = remember { mutableStateOf<String?>(null) }
-    val interactionSource = remember { MutableInteractionSource() }
+    val emailError = remember { mutableStateOf<String?>(null) }
+    val passwordError = remember { mutableStateOf<String?>(null) }
+    val usernameError = remember { mutableStateOf<String?>(null) }
 
+    val interactionSource = remember { MutableInteractionSource() }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .background(config!!.backgroundColor),
+            .background(config.backgroundColor),
         verticalArrangement = Arrangement.Center
     ) {
+        // EMAIL
+        Text("Email", color = config.textColor)
         OutlinedTextField(
             value = email.value,
-            onValueChange = { email.value = it },
-            label = { Text("Email", color = config.textColor) },
+            onValueChange = {
+                email.value = it
+                emailError.value = null
+            },
+            placeholder = { Text("Enter your email") },
+            isError = emailError.value != null,
             textStyle = TextStyle(color = config.textColor, fontSize = config.fontSize, fontFamily = config.fontFamily),
             modifier = Modifier.fillMaxWidth()
         )
+        emailError.value?.let {
+            Text(it, color = Color.Red, fontSize = 12.sp)
+        }
 
+        // PASSWORD
+        Text("Password", color = config.textColor, modifier = Modifier.padding(top = 8.dp))
         OutlinedTextField(
             value = password.value,
-            onValueChange = { password.value = it },
-            label = { Text("Password", color = config.textColor) },
+            onValueChange = {
+                password.value = it
+                passwordError.value = null
+            },
+            placeholder = { Text("Minimum 8 characters, alphanumeric") },
             visualTransformation = PasswordVisualTransformation(),
+            isError = passwordError.value != null,
             textStyle = TextStyle(color = config.textColor, fontSize = config.fontSize, fontFamily = config.fontFamily),
             modifier = Modifier.fillMaxWidth()
         )
+        passwordError.value?.let {
+            Text(it, color = Color.Red, fontSize = 12.sp)
+        }
 
+        // USERNAME (OPTIONAL)
         if (config.showUsername) {
+            Text("Username", color = config.textColor, modifier = Modifier.padding(top = 8.dp))
             OutlinedTextField(
                 value = username.value,
-                onValueChange = { username.value = it },
-                label = { Text("Username", color = config.textColor) },
+                onValueChange = {
+                    username.value = it
+                    usernameError.value = null
+                },
+                placeholder = { Text("No spaces or special characters") },
+                isError = usernameError.value != null,
                 textStyle = TextStyle(color = config.textColor, fontSize = config.fontSize, fontFamily = config.fontFamily),
                 modifier = Modifier.fillMaxWidth()
             )
+            usernameError.value?.let {
+                Text(it, color = Color.Red, fontSize = 12.sp)
+            }
         }
 
+        // FIRST NAME
+        Text("First Name", color = config.textColor, modifier = Modifier.padding(top = 8.dp))
         OutlinedTextField(
             value = firstName.value,
             onValueChange = { firstName.value = it },
-            label = { Text("First Name", color = config.textColor) },
+            placeholder = { Text("Enter your first name") },
             textStyle = TextStyle(color = config.textColor, fontSize = config.fontSize, fontFamily = config.fontFamily),
             modifier = Modifier.fillMaxWidth()
         )
 
+        // LAST NAME
+        Text("Last Name", color = config.textColor, modifier = Modifier.padding(top = 8.dp))
         OutlinedTextField(
             value = lastName.value,
             onValueChange = { lastName.value = it },
-            label = { Text("Last Name", color = config.textColor) },
+            placeholder = { Text("Enter your last name") },
             textStyle = TextStyle(color = config.textColor, fontSize = config.fontSize, fontFamily = config.fontFamily),
             modifier = Modifier.fillMaxWidth()
         )
 
-        errorMessage.value?.let {
-            Text(it, color = Color.Red, fontSize = 14.sp, modifier = Modifier.padding(top = 8.dp))
-        }
-
+        // SUBMIT BUTTON
         Button(
             onClick = {
+                var hasError = false
+
                 val emailPattern = Regex("^[\\w.-]+@[\\w.-]+\\.\\w+$")
                 if (!emailPattern.matches(email.value)) {
-                    errorMessage.value = "Invalid email format"
-                } else if (password.value.length < 8) {
-                    errorMessage.value = "Password must be at least 8 characters"
-                } else {
-                    errorMessage.value = null
+                    emailError.value = "Invalid email format"
+                    hasError = true
+                }
+
+                val passwordPattern = Regex("^(?=.*[a-zA-Z])(?=.*\\d).{8,}$")
+                if (!passwordPattern.matches(password.value)) {
+                    passwordError.value = "Password must be at least 8 characters and alphanumeric"
+                    hasError = true
+                }
+
+                if (config.showUsername && !Regex("^[a-zA-Z0-9_]+$").matches(username.value)) {
+                    usernameError.value = "Username must not contain spaces or special characters"
+                    hasError = true
+                }
+
+                if (!hasError) {
                     val user = UserData(
                         email.value,
                         password.value,
@@ -115,12 +156,7 @@ fun AuthScreen(
                         firstName.value,
                         lastName.value
                     )
-                    // Store securely
-//                    SecureStorageHelper.storeUserData(context, user)
-
-                    onSubmit(
-                        user
-                    )
+                    onSubmit(user)
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = config.primaryColor),
