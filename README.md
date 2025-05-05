@@ -127,7 +127,7 @@ Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 ---
 
 ### 📦 Native Android Demo App
-👉🏽 You can view its implementation [here]([(https://github.com/EQua-Dev/AuthSDK_Demo_App)) 
+👉🏽 You can view its implementation [here](https://github.com/EQua-Dev/AuthSDK_Demo_App)
 
 
 ## 💙 Flutter Integration
@@ -397,4 +397,4 @@ class AuthSDK {
 
 
 ## 📱 iOS Version
-For iOS developers, the iOS version of the SDK can be found [here]((https://github.com/EQua-Dev/Assessment_Auth_SDK_iOS)
+For iOS developers, the iOS version of the SDK can be found [here](https://github.com/EQua-Dev/Assessment_Auth_SDK_iOS)
