@@ -47,7 +47,7 @@ include(":authSDK")
 ```
 
 2. **Set up the project for the SDK UI**
-The SDK uses Jetpack Compose and so, if the project does not support jetpack compose, include its libraries and support in the app/build.gradle file
+The SDK uses Jetpack Compose and so, if the project does not support Jetpack Compose, include its libraries and support in the app/build.gradle file
 
 ***Include these libraries into the dependencies block***
 ``` bash
@@ -78,7 +78,7 @@ import tech.sourceid.assessment.authsdk.AuthActivity
 import tech.sourceid.assessment.authsdk.data.AuthConfig
 import tech.sourceid.assessment.authsdk.data.AuthConfigHolder
 ```
-***Call the SDK ***
+***Call the SDK***
 ``` kotlin
 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(
@@ -393,8 +393,8 @@ class AuthSDK {
 ---
 
 ### 📦 Flutter Demo App
-👉🏽 You can view its implementation [here](https://github.com/EQua-Dev/Flutter_AuthSDK_Implementation)) 
+👉🏽 You can view its implementation [here](https://github.com/EQua-Dev/Flutter_AuthSDK_Implementation)
 
 
 ## 📱 iOS Version
-For iOS developers, the iOS version of the SDK can be found [here]((https://github.com/EQua-Dev/Assessment_Auth_SDK_iOS))
+For iOS developers, the iOS version of the SDK can be found [here]((https://github.com/EQua-Dev/Assessment_Auth_SDK_iOS)
